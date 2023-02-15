@@ -5,8 +5,8 @@ import matplotlib
 import datetime
 from random import randint
 import json
-  
-app = Flask(__name__) #creating the Flask class object   
+
+app = Flask(__name__) #creating the Flask class object
 
 PRODUCTION = True
 
@@ -23,7 +23,10 @@ def getAlertHistory():
     file = open(HISTORY_JSON, 'r')
     s = file.read()
     file.close()
-    JSON = json.loads(s)
+    try:
+        JSON = json.loads(s)
+    except Exception as e:
+        print("Exception:",e)
     return JSON
 
 
@@ -42,16 +45,21 @@ def home():
     if request.method == 'POST':
         try:
             host, host_url = request.host, request.host_url
-            data = request.json
+            data = request.data.decode('utf-8')
             JSON = getAlertHistory()
             date = str(datetime.datetime.now())
-            JSON.insert(0,{'date':date, 'content':data, 'host':host, 'host_url':host_url})
-            setAlertHistory(JSON)
+            JSON.insert(0,{'date':date, 'content':data})
+            try:
+                setAlertHistory(JSON)
+            except Exception as e:
+                print("*"*10, str(e))
+
             return {"status": "SUCCESS"}
         except Exception as e:
+            print("Error:",e)
             JSON = getAlertHistory()
             date = str(datetime.datetime.now())
-            JSON.insert(0,{'date':date, 'content':str(e), 'host':host, 'host_url':host_url})
+            JSON.insert(0,{'date':date, 'content':str(e)})
             setAlertHistory(JSON)
             return {"status": "ERROR"}
     JSON = getAlertHistory()
@@ -68,7 +76,7 @@ def view_alerts():
 def send_image():
     img_size = (300,300)
     img = get_random_image(img_size)  #returns numpy array
-    
+
     filename = "{}-{}.png".format(str(datetime.datetime.now().timestamp()),str(randint(0, 10000)))
     imagePath = "{}/{}".format(IMG_DESTINATION,filename)
     matplotlib.image.imsave(imagePath, img)
@@ -81,6 +89,6 @@ def send_image():
     response.headers["Access-Control-Allow-Origin"] = "*"
     return response
     # return send_file(imagePath, mimetype='image/gif')
-  
-if __name__ =='__main__':  
-    app.run(debug = True)  
+
+if __name__ =='__main__':
+    app.run(debug = True)
