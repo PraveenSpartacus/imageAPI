@@ -13,8 +13,10 @@ PRODUCTION = True
 IMG_DESTINATION = ''
 if PRODUCTION:
     IMG_DESTINATION = './imageAPI/static/IMG'
+    HISTORY_JSON = './imageAPI/history.json'
 else:
     IMG_DESTINATION = './static/IMG'
+    HISTORY_JSON = './history.json'
 
 
 def getAlertHistory():
