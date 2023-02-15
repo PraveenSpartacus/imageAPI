@@ -20,7 +20,7 @@ else:
 
 
 def getAlertHistory():
-    file = open('./TradingViewAlerts/history.json', 'r')
+    file = open(HISTORY_JSON, 'r')
     s = file.read()
     file.close()
     JSON = json.loads(s)
@@ -28,7 +28,7 @@ def getAlertHistory():
 
 
 def setAlertHistory(JSON):
-    file = open('./TradingViewAlerts/history.json', 'w')
+    file = open(HISTORY_JSON, 'w')
     file.write(json.dumps(JSON, indent=4))
     file.close()
 
