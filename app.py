@@ -49,6 +49,8 @@ def home():
             setAlertHistory(JSON)
             return {"status": "SUCCESS"}
         except Exception as e:
+            JSON = getAlertHistory()
+            date = str(datetime.datetime.now())
             JSON.insert(0,{'date':date, 'content':str(e), 'host':host, 'host_url':host_url})
             setAlertHistory(JSON)
             return {"status": "ERROR"}
