@@ -8,7 +8,7 @@ import json
   
 app = Flask(__name__) #creating the Flask class object   
 
-PRODUCTION = False
+PRODUCTION = True
 
 IMG_DESTINATION = ''
 if PRODUCTION:
