@@ -55,7 +55,7 @@ def home():
     JSON = getAlertHistory()
     JSON.insert(0,{'date':"now!", 'content':"GET REQUEST"})
     setAlertHistory(JSON)
-    return JSON
+    return {"METHOD":"GET"}
 
 @app.route('/view-alerts', methods=['GET'])
 def view_alerts():
